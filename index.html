@@ -1,0 +1,1052 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O'NASSA Livraison Eau</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f5f9ff;
+}
+
+/* HEADER */
+
+header{
+background:linear-gradient(135deg,#0077b6,#00b4d8);
+padding:20px;
+color:white;
+}
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+}
+
+.logo{
+background:white;
+padding:10px;
+border-radius:15px;
+}
+
+.logo img{
+width:120px;
+}
+
+.owner{
+width:75px;
+height:75px;
+border-radius:50%;
+overflow:hidden;
+border:3px solid white;
+}
+
+.owner img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.company h1{
+font-size:34px;
+}
+
+/* HERO */
+
+.hero{
+background:white;
+padding:40px;
+text-align:center;
+}
+
+.hero h2{
+font-size:30px;
+color:#023e8a;
+}
+
+/* PRODUCTS */
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:20px;
+padding:25px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:18px;
+box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:20px;
+    padding:25px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:18px;
+}
+
+.card video{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    border-radius:10px;
+}
+
+input,select,button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:10px;
+border:1px solid #ccc;
+}
+
+button{
+border:none;
+cursor:pointer;
+background:#00b4d8;
+color:white;
+}
+
+/* PANIER */
+
+#cartBtn{
+position:fixed;
+right:20px;
+bottom:20px;
+background:#06e846;
+color:white;
+width:65px;
+height:65px;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:30px;
+cursor:pointer;
+}
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.5);
+z-index:999;
+}
+
+.modalContent{
+background:white;
+width:90%;
+max-width:600px;
+margin:40px auto;
+padding:20px;
+border-radius:20px;
+max-height:85vh;
+overflow:auto;
+}
+
+/* TRACKING */
+
+.tracking-box{
+background:white;
+margin:30px;
+padding:20px;
+border-radius:20px;
+}
+
+.timeline{
+margin-top:20px;
+}
+
+.step{
+display:flex;
+align-items:center;
+margin:18px 0;
+}
+
+.circle{
+width:22px;
+height:22px;
+border-radius:50%;
+background:#ccc;
+margin-right:15px;
+}
+
+/* timeline couleurs */
+
+.green{
+background:#16a34a;
+}
+
+.orange{
+background:#f97316;
+}
+
+.yellow{
+background:#eab308;
+}
+
+.blue{
+background:#1804f0;
+}
+
+/* ADMIN */
+
+#adminButton{
+position:fixed;
+left:20px;
+bottom:20px;
+background:#111827;
+color:white;
+padding:12px;
+border-radius:10px;
+cursor:pointer;
+}
+
+#adminPanel{
+display:none;
+background:white;
+margin:30px;
+padding:20px;
+border-radius:20px;
+}
+
+/* commandes */
+
+.order{
+background:#eef6ff;
+padding:15px;
+margin:12px 0;
+border-radius:12px;
+}
+
+/* BOUTONS ADMIN */
+
+.adminBtn{
+background:#87ceeb;      /* bleu ciel par défaut */
+color:white;
+border:none;
+padding:10px;
+margin-top:8px;
+border-radius:10px;
+cursor:pointer;
+width:100%;
+}
+
+/* couleurs actives */
+
+.activeConfirmed{
+background:#16a34a;
+}
+
+.activePreparation{
+background:#f97316;
+}
+
+.activeReady{
+background:#2e08ea;
+color:black;
+}
+
+.activeShipping{
+background:#cfc5b1;
+}
+
+.activeDelivered{
+background:#0f172a;
+}
+
+/* footer */
+
+footer{
+margin-top:30px;
+padding:20px;
+background:#1d04b0;
+color:white;
+text-align:center;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="top">
+
+<div class="logo">
+<img src="logo.jpeg">
+</div>
+
+<div class="company">
+<h1>O'NASSA Grand-Zattry</h1>
+<p>Eau pure • Livraison rapide</p>
+</div>
+
+<div class="owner">
+<img src="profil.jpeg">
+</div>
+
+</div>
+
+</header>
+
+<section class="hero">
+
+<h2>Commander votre eau maintenant</h2>
+
+<p>Gros • Demi-gros • Détail</p>
+
+</section>
+
+<section class="products">
+
+<div class="card">
+<video controls autoplay muted loop width="600">
+<source src="bidon.mp4"type="video/mp4" >
+</video>
+<h2>Bidons d’eau</h2>
+<select id="bidonType">
+
+<option value="5000">Gros - 5000 FCFA</option>
+<option value="1000">Demi-gros - 1000 FCFA</option>
+<option value="100">Détail - 100 FCFA</option>
+
+</select>
+
+<input id="bidonQty" type="number" placeholder="Quantité">
+
+<button onclick="addBidon()">Ajouter</button>
+
+</div>
+
+<div class="card">
+<video controls autoplay muted loop width="600">
+<source src="sacher.mp4"type="video/mp4" >
+</video>
+<h2>Sachets d’eau</h2>
+<select id="sachetType">
+
+<option value="2000">Gros - 2000 FCFA</option>
+<option value="1000">Demi-gros - 1000 FCFA</option>
+<option value="50">Détail - 50 FCFA</option>
+
+</select>
+
+<input id="sachetQty" type="number" placeholder="Quantité">
+
+<button onclick="addSachet()">Ajouter</button>
+
+</div>
+
+</section>
+
+<section class="tracking-box">
+
+<h2>Client fidèle</h2>
+
+<input id="loyalCode" placeholder="Entrez votre code fidélité">
+
+<button onclick="checkCode()">Valider</button>
+
+<p id="codeResult"></p>
+
+</section>
+
+<div id="cartBtn" onclick="openCart()">🛒</div>
+
+<div class="modal" id="cartModal">
+
+<div class="modalContent">
+
+<h2>Mon panier</h2>
+
+<div id="cartItems"></div>
+
+<h3 id="cartTotal">Total : 0 FCFA</h3>
+
+<hr>
+
+<input id="clientName" placeholder="Nom complet">
+
+<input id="clientCity" placeholder="Ville">
+
+<input id="clientPhone" placeholder="Téléphone">
+
+<button onclick="sendOrder()">Commander</button>
+
+<button onclick="closeCart()">Fermer</button>
+
+</div>
+
+</div>
+
+<section class="tracking-box">
+
+<h2>Suivre ma commande</h2>
+
+<input id="trackCode" placeholder="Code commande">
+
+<button onclick="trackOrder()">Suivre colis</button>
+
+<div id="trackingArea"></div>
+
+</section>
+
+<section class="tracking-box">
+
+<h2>Historique</h2>
+
+<div id="history"></div>
+
+</section>
+
+<div id="adminButton" onclick="showAdmin()">
+ADMIN
+</div>
+
+<section id="adminPanel">
+
+<h2>Connexion Admin</h2>
+
+<input 
+type="password"
+id="adminPass"
+placeholder="Mot de passe admin">
+
+<button onclick="loginAdmin()">
+Connexion
+</button>
+
+<br><br>
+
+<div id="adminOrders"></div>
+
+</section>
+
+<footer>
+O'NASSA © 2026
+</footer>
+<script>
+
+let cart=[];
+let loyal=false;
+
+const codes=[
+
+"ON001","ON002","ON003","ON004","ON005",
+"ON006","ON007","ON008","ON009","ON010",
+"ON011","ON012","ON013","ON014","ON015",
+"ON016","ON017","ON018","ON019","ON020",
+"ON021","ON022","ON023","ON024","ON025",
+"ON026","ON027","ON028","ON029","ON030"
+
+];
+
+
+/* AJOUT BIDON */
+
+function addBidon(){
+
+let price=parseInt(
+document.getElementById("bidonType").value
+);
+
+let qty=parseInt(
+document.getElementById("bidonQty").value
+);
+
+if(!qty){
+alert("Entrez quantité");
+return;
+}
+
+if(loyal){
+
+if(price===5000) price=4500;
+if(price===1000) price=800;
+if(price===100) price=80;
+
+}
+
+cart.push({
+
+name:"Bidon",
+price:price,
+qty:qty
+
+});
+
+alert("Ajouté au panier");
+
+}
+
+
+/* AJOUT SACHET */
+
+function addSachet(){
+
+let price=parseInt(
+document.getElementById("sachetType").value
+);
+
+let qty=parseInt(
+document.getElementById("sachetQty").value
+);
+
+if(!qty){
+alert("Entrez quantité");
+return;
+}
+
+if(loyal){
+
+if(price===2000) price=1700;
+if(price===1000) price=800;
+if(price===50) price=40;
+
+}
+
+cart.push({
+
+name:"Sachet",
+price:price,
+qty:qty
+
+});
+
+alert("Ajouté au panier");
+
+}
+
+
+/* CODE FIDELITE */
+
+function checkCode(){
+
+let code=
+document.getElementById("loyalCode").value;
+
+if(codes.includes(code)){
+
+loyal=true;
+
+document.getElementById("codeResult").innerHTML=
+"✓ Prix spéciaux activés";
+
+}else{
+
+document.getElementById("codeResult").innerHTML=
+"Code invalide";
+
+}
+
+}
+
+
+/* OUVRIR PANIER */
+
+function openCart(){
+
+document.getElementById("cartModal").style.display="block";
+
+showCart();
+
+}
+
+function closeCart(){
+
+document.getElementById("cartModal").style.display="none";
+
+}
+
+
+/* AFFICHER PANIER */
+
+function showCart(){
+
+let zone=document.getElementById("cartItems");
+
+let total=0;
+
+zone.innerHTML="";
+
+cart.forEach((item,index)=>{
+
+let subtotal=item.price*item.qty;
+
+total+=subtotal;
+
+zone.innerHTML += `
+
+<div class="order">
+
+${item.name}<br>
+
+Prix : ${item.price} FCFA<br>
+
+Quantité : ${item.qty}<br>
+
+Sous-total : ${subtotal} FCFA<br><br>
+
+<button onclick="removeItem(${index})">
+Supprimer
+</button>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("cartTotal").innerHTML=
+"Total : "+total+" FCFA";
+
+}
+
+
+/* SUPPRIMER */
+
+function removeItem(index){
+
+cart.splice(index,1);
+
+showCart();
+
+}
+
+
+/* ENVOYER COMMANDE */
+
+function sendOrder(){
+
+let name=document.getElementById("clientName").value;
+
+let city=document.getElementById("clientCity").value;
+
+let phone=document.getElementById("clientPhone").value;
+
+if(name===""||city===""||phone===""){
+
+alert("Remplissez tout");
+
+return;
+
+}
+
+if(cart.length===0){
+
+alert("Panier vide");
+
+return;
+
+}
+
+let total=0;
+
+let details="";
+
+cart.forEach(item=>{
+
+let amount=item.price*item.qty;
+
+total+=amount;
+
+details += item.name+" x"+item.qty+
+" = "+amount+" FCFA %0A";
+
+});
+
+let code="CMD"+Date.now();
+
+
+/* sauvegarder */
+
+let orders=
+JSON.parse(localStorage.getItem("orders")) || [];
+
+orders.push({
+
+code:code,
+name:name,
+city:city,
+phone:phone,
+total:total,
+status:"Commande effectuée",
+deliveredAt:null
+
+});
+
+localStorage.setItem(
+"orders",
+JSON.stringify(orders)
+);
+
+
+/* whatsapp */
+
+let msg=
+
+"Commande O'NASSA %0A"+
+"Nom:"+name+"%0A"+
+"Ville:"+city+"%0A"+
+"Tel:"+phone+"%0A"+
+details+
+"%0ATotal:"+total+
+"%0ACode:"+code;
+
+window.open(
+
+"https://wa.me/2250594720472?text="+msg
+
+);
+
+alert("Commande envoyée : "+code);
+
+cart=[];
+
+showCart();
+
+loadHistory();
+
+}
+
+
+/* TRACKING */
+
+function trackOrder(){
+
+let code=
+document.getElementById("trackCode").value;
+
+let orders=
+JSON.parse(localStorage.getItem("orders")) || [];
+
+let found=
+orders.find(o=>o.code===code);
+
+if(!found){
+
+document.getElementById("trackingArea").innerHTML=
+"Commande introuvable";
+
+return;
+
+}
+
+let s=found.status;
+
+let html=`
+
+<div class="timeline">
+
+<div class="step">
+<div class="circle green"></div>
+Commande effectuée
+</div>
+
+<div class="step">
+<div class="circle ${s==='Confirmé' || s==='Préparation' || s==='Prêt à être livré' || s==='Expédition' || s==='Colis livré' ? 'green':''}">
+</div>
+Confirmé
+</div>
+
+<div class="step">
+<div class="circle ${s==='Préparation' || s==='Prêt à être livré' || s==='Expédition' || s==='Colis livré' ? 'orange':''}">
+</div>
+Préparation
+</div>
+
+<div class="step">
+<div class="circle ${s==='Prêt à être livré' || s==='Expédition' || s==='Colis livré' ? 'yellow':''}">
+</div>
+Prêt à être livré
+</div>
+
+<div class="step">
+<div class="circle ${s==='Expédition' || s==='Colis livré' ? 'blue':''}">
+</div>
+Expédition
+</div>
+
+<div class="step">
+<div class="circle ${s==='Colis livré' ? 'green':''}">
+</div>
+Colis livré
+</div>
+
+</div>
+
+`;
+
+document.getElementById("trackingArea").innerHTML=
+html;
+
+}
+
+
+/* HISTORIQUE */
+
+function loadHistory(){
+
+let orders=
+JSON.parse(localStorage.getItem("orders")) || [];
+
+let box=document.getElementById("history");
+
+box.innerHTML="";
+
+orders.forEach(order=>{
+
+box.innerHTML += `
+
+<div class="order">
+
+Commande : ${order.code}<br>
+
+Montant : ${order.total} FCFA<br>
+
+Etat : ${order.status}
+
+</div>
+
+`;
+
+});
+
+}
+
+/* OUVRIR ADMIN */
+
+function showAdmin(){
+
+document.getElementById("adminPanel").style.display="block";
+
+}
+
+
+/* CONNEXION ADMIN AVEC CODE */
+
+function loginAdmin(){
+
+let pass=
+document.getElementById("adminPass").value;
+
+if(pass==="Onassa2026"){
+
+loadAdminOrders();
+
+alert("Connexion admin réussie");
+
+}else{
+
+alert("Mot de passe incorrect");
+
+}
+
+}
+
+
+/* AFFICHER COMMANDES ADMIN */
+
+function loadAdminOrders(){
+
+let orders=
+JSON.parse(localStorage.getItem("orders")) || [];
+
+let zone=
+document.getElementById("adminOrders");
+
+zone.innerHTML="";
+
+
+orders.forEach((order,index)=>{
+
+zone.innerHTML += `
+
+<div class="order">
+
+Code : ${order.code}<br>
+
+Client : ${order.name}<br>
+
+Montant : ${order.total} FCFA<br>
+
+Etat : <b>${order.status}</b><br><br>
+
+
+<button
+class="adminBtn ${order.status==='Confirmé' ? 'activeConfirmed':''}"
+onclick="changeStatus(${index},'Confirmé')">
+
+Confirmer
+
+</button>
+
+
+<button
+class="adminBtn ${order.status==='Préparation' ? 'activePreparation':''}"
+onclick="changeStatus(${index},'Préparation')">
+
+Préparation
+
+</button>
+
+
+<button
+class="adminBtn ${order.status==='Prêt à être livré' ? 'activeReady':''}"
+onclick="changeStatus(${index},'Prêt à être livré')">
+
+Prêt livraison
+
+</button>
+
+
+<button
+class="adminBtn ${order.status==='Expédition' ? 'activeShipping':''}"
+onclick="changeStatus(${index},'Expédition')">
+
+Expédition
+
+</button>
+
+
+<button
+class="adminBtn ${order.status==='Colis livré' ? 'activeDelivered':''}"
+onclick="changeStatus(${index},'Colis livré')">
+
+Livré
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+/* CHANGER STATUT */
+
+function changeStatus(index,status){
+
+let orders=
+JSON.parse(localStorage.getItem("orders")) || [];
+
+orders[index].status=status;
+
+
+/* si livré -> enregistrer temps */
+
+if(status==="Colis livré"){
+
+orders[index].deliveredAt=Date.now();
+
+}
+
+localStorage.setItem(
+
+"orders",
+JSON.stringify(orders)
+
+);
+
+
+/* refresh */
+
+loadAdminOrders();
+
+loadHistory();
+
+alert("Statut changé");
+
+}
+
+
+/* SUPPRIMER SI LIVRE DEPUIS 3 MINUTES */
+
+function cleanDelivered(){
+
+let orders=
+JSON.parse(localStorage.getItem("orders")) || [];
+
+let now=Date.now();
+
+orders=orders.filter(order=>{
+
+if(order.status==="Colis livré"){
+
+let diff=
+now-order.deliveredAt;
+
+
+/* 180000 = 3 min */
+
+if(diff>180000){
+
+return false;
+
+}
+
+}
+
+return true;
+
+});
+
+localStorage.setItem(
+
+"orders",
+JSON.stringify(orders)
+
+);
+
+loadHistory();
+
+}
+
+
+/* AUTO VERIFICATION */
+
+setInterval(function(){
+
+cleanDelivered();
+
+},5000);
+
+
+/* DEMARRAGE */
+
+window.onload=function(){
+
+loadHistory();
+
+};
+
+</script>
+
+</body>
+</html>
