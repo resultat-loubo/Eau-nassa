@@ -7,7 +7,7 @@
 <title>O'NASSA Livraison Eau</title>
 <meta name="google-site-verification" content="Y9nU7Pe5BbF_-OUGyoQ6H83aDAEgjvppLymHU8PCmJc" />
 <link rel="canonical" href="https://resultat-loubo.github.io/Eau-nassa/">
- <link rel="icon" href="logo.jpeg">   
+<link rel="icon" href="profil.jpeg">  
 <style>
 
 *{
@@ -79,6 +79,13 @@ color:#023e8a;
 
 /* PRODUCTS */
 
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:20px;
+padding:25px;
+}
+
 .card{
 background:white;
 padding:25px;
@@ -91,6 +98,10 @@ box-shadow:0 4px 12px rgba(0,0,0,.1);
     gap:20px;
     padding:25px;
 }
+
+.card img{width:100%;height:700px;object-fit:cover}
+.card-content{padding:20px}
+.card-content h3{color:#0b3d91;margin-bottom:10px}
 
 .card{
     background:white;
@@ -110,14 +121,14 @@ width:100%;
 padding:12px;
 margin-top:10px;
 border-radius:10px;
-border:1px solid #ccc;
+border:1px solid #f9d4cb;
 }
 
 button{
 border:none;
 cursor:pointer;
-background:#00b4d8;
-color:white;
+background:#0094bd;
+color:rgb(12, 12, 12);
 }
 
 /* PANIER */
@@ -150,7 +161,7 @@ z-index:999;
 }
 
 .modalContent{
-background:white;
+background:rgb(254, 253, 253);
 width:90%;
 max-width:600px;
 margin:40px auto;
@@ -163,7 +174,7 @@ overflow:auto;
 /* TRACKING */
 
 .tracking-box{
-background:white;
+background:rgb(216, 235, 253);
 margin:30px;
 padding:20px;
 border-radius:20px;
@@ -259,7 +270,7 @@ background:#f97316;
 }
 
 .activeReady{
-background:#2e08ea;
+background:#330cf3;
 color:black;
 }
 
@@ -280,33 +291,25 @@ background:#1d04b0;
 color:white;
 text-align:center;
 }
-
 </style>
 </head>
 
 <body>
-
-<header>
-
-<div class="top">
-
+  <header>
+    <div class="top">
 <div class="logo">
-<img src="logo.jpeg">
-</div>
-
+    <img src="image/logo.jpeg">
+    </div>
 <div class="company">
-<h1>O'NASSA Grand-Zattry</h1>
-<p>Eau pure • Livraison rapide</p>
+<img src="">
+<h1><marquee> O'NASSA GRAND-ZATTRY</marquee></h1>
+<p>Eau pure•livraison•rapide</p>
 </div>
-
-<div class="owner">
-<img src="profil.jpeg">
-</div>
-
-</div>
-
-</header>
-
+    <div class="owner"> 
+<img src="image/profil.jpeg">
+    </div>
+    </div>
+ </header> 
 <section class="hero">
 
 <h2>Commander votre eau maintenant</h2>
@@ -318,9 +321,7 @@ text-align:center;
 <section class="products">
 
 <div class="card">
-<video controls autoplay muted loop >
-<source src="bidon.mp4"type="video/mp4" >
-</video>
+<img src="image/bidon2.jpeg">
 <h2>Bidons d’eau</h2>
 <select id="bidonType">
 
@@ -335,11 +336,8 @@ text-align:center;
 <button onclick="addBidon()">Ajouter</button>
 
 </div>
-
 <div class="card">
-<video controls autoplay muted loop width="600">
-<source src="sacher.mp4"type="video/mp4" >
-</video>
+<img src="image/sacher2.png">
 <h2>Sachets d’eau</h2>
 <select id="sachetType">
 
@@ -442,6 +440,8 @@ Connexion
 
 <footer>
 O'NASSA © 2026
+<p>&copy; 2026 Grand-Zattry </p>
+<p>Mail:o'nassa524@Gmail.com /Tel:01-43-34-17-09 /</p>
 </footer>
 <script>
 
