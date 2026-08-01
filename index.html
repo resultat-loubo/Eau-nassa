@@ -443,601 +443,206 @@ O'NASSA © 2026
 <p>&copy; 2026 Grand-Zattry </p>
 <p>Mail:o'nassa524@Gmail.com /Tel:01-43-34-17-09 /</p>
 </footer>
-<script>
+<script type="module">
+
+/* ================= FIREBASE REALTIME ================= */
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, update } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB6p104mWHVO_eEcI8GIl6aQZr57qH5Jts",
+  authDomain: "o-nassa.firebaseapp.com",
+  databaseURL: "https://o-nassa-default-rtdb.firebaseio.com/",
+  projectId: "o-nassa",
+  storageBucket: "o-nassa.firebasestorage.app",
+  messagingSenderId: "264530421759",
+  appId: "1:264530421759:web:810f1ac2f5e2d3572629ca"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+/* ================= VARIABLES ================= */
 
 let cart=[];
-let loyal=false;
 
-const codes=[
+/* ================= AJOUT PRODUITS ================= */
 
-"ON001","ON002","ON003","ON004","ON005",
-"ON006","ON007","ON008","ON009","ON010",
-"ON011","ON012","ON013","ON014","ON015",
-"ON016","ON017","ON018","ON019","ON020",
-"ON021","ON022","ON023","ON024","ON025",
-"ON026","ON027","ON028","ON029","ON030"
+window.addBidon = function(){
+let price=parseInt(document.getElementById("bidonType").value);
+let qty=parseInt(document.getElementById("bidonQty").value);
 
-];
+if(!qty) return alert("Entrez quantité");
 
+cart.push({name:"Bidon",price,qty});
+alert("Ajouté");
+};
 
-/* AJOUT BIDON */
+window.addSachet = function(){
+let price=parseInt(document.getElementById("sachetType").value);
+let qty=parseInt(document.getElementById("sachetQty").value);
 
-function addBidon(){
+if(!qty) return alert("Entrez quantité");
 
-let price=parseInt(
-document.getElementById("bidonType").value
-);
+cart.push({name:"Sachet",price,qty});
+alert("Ajouté");
+};
 
-let qty=parseInt(
-document.getElementById("bidonQty").value
-);
+/* ================= PANIER ================= */
 
-if(!qty){
-alert("Entrez quantité");
-return;
-}
-
-if(loyal){
-
-if(price===5000) price=4500;
-if(price===1000) price=800;
-if(price===100) price=80;
-
-}
-
-cart.push({
-
-name:"Bidon",
-price:price,
-qty:qty
-
-});
-
-alert("Ajouté au panier");
-
-}
-
-
-/* AJOUT SACHET */
-
-function addSachet(){
-
-let price=parseInt(
-document.getElementById("sachetType").value
-);
-
-let qty=parseInt(
-document.getElementById("sachetQty").value
-);
-
-if(!qty){
-alert("Entrez quantité");
-return;
-}
-
-if(loyal){
-
-if(price===2000) price=1700;
-if(price===1000) price=800;
-if(price===50) price=40;
-
-}
-
-cart.push({
-
-name:"Sachet",
-price:price,
-qty:qty
-
-});
-
-alert("Ajouté au panier");
-
-}
-
-
-/* CODE FIDELITE */
-
-function checkCode(){
-
-let code=
-document.getElementById("loyalCode").value;
-
-if(codes.includes(code)){
-
-loyal=true;
-
-document.getElementById("codeResult").innerHTML=
-"✓ Prix spéciaux activés";
-
-}else{
-
-document.getElementById("codeResult").innerHTML=
-"Code invalide";
-
-}
-
-}
-
-
-/* OUVRIR PANIER */
-
-function openCart(){
-
+window.openCart = function(){
 document.getElementById("cartModal").style.display="block";
-
 showCart();
+};
 
-}
-
-function closeCart(){
-
+window.closeCart = function(){
 document.getElementById("cartModal").style.display="none";
-
-}
-
-
-/* AFFICHER PANIER */
+};
 
 function showCart(){
-
 let zone=document.getElementById("cartItems");
-
 let total=0;
-
 zone.innerHTML="";
 
 cart.forEach((item,index)=>{
-
 let subtotal=item.price*item.qty;
-
 total+=subtotal;
 
-zone.innerHTML += `
-
+zone.innerHTML+=`
 <div class="order">
-
-${item.name}<br>
-
-Prix : ${item.price} FCFA<br>
-
-Quantité : ${item.qty}<br>
-
-Sous-total : ${subtotal} FCFA<br><br>
-
-<button onclick="removeItem(${index})">
-Supprimer
-</button>
-
-</div>
-
-`;
-
+${item.name} x${item.qty}<br>
+${subtotal} FCFA<br>
+<button onclick="removeItem(${index})">Supprimer</button>
+</div>`;
 });
 
-document.getElementById("cartTotal").innerHTML=
-"Total : "+total+" FCFA";
-
+document.getElementById("cartTotal").innerHTML="Total : "+total+" FCFA";
 }
 
-
-/* SUPPRIMER */
-
-function removeItem(index){
-
+window.removeItem = function(index){
 cart.splice(index,1);
-
 showCart();
+};
 
-}
+/* ================= ENVOYER COMMANDE ================= */
 
-
-/* ENVOYER COMMANDE */
-
-function sendOrder(){
+window.sendOrder = function(){
 
 let name=document.getElementById("clientName").value;
-
 let city=document.getElementById("clientCity").value;
-
 let phone=document.getElementById("clientPhone").value;
 
-if(name===""||city===""||phone===""){
-
-alert("Remplissez tout");
-
-return;
-
-}
-
-if(cart.length===0){
-
-alert("Panier vide");
-
-return;
-
-}
+if(!name||!city||!phone) return alert("Remplissez tout");
+if(cart.length===0) return alert("Panier vide");
 
 let total=0;
-
-let details="";
-
-cart.forEach(item=>{
-
-let amount=item.price*item.qty;
-
-total+=amount;
-
-details += item.name+" x"+item.qty+
-" = "+amount+" FCFA %0A";
-
-});
+cart.forEach(i=> total+=i.price*i.qty);
 
 let code="CMD"+Date.now();
 
+/* 🔥 ENVOI DANS FIREBASE */
 
-/* sauvegarder */
-
-let orders=
-JSON.parse(localStorage.getItem("orders")) || [];
-
-orders.push({
-
-code:code,
-name:name,
-city:city,
-phone:phone,
-total:total,
+push(ref(db,"orders"),{
+code,
+name,
+city,
+phone,
+total,
 status:"Commande effectuée",
-deliveredAt:null
-
+createdAt:Date.now()
 });
-
-localStorage.setItem(
-"orders",
-JSON.stringify(orders)
-);
-
-
-/* whatsapp */
-
-let msg=
-
-"Commande O'NASSA %0A"+
-"Nom:"+name+"%0A"+
-"Ville:"+city+"%0A"+
-"Tel:"+phone+"%0A"+
-details+
-"%0ATotal:"+total+
-"%0ACode:"+code;
-
-window.open(
-
-"https://wa.me/2250594720472?text="+msg
-
-);
 
 alert("Commande envoyée : "+code);
 
 cart=[];
-
 showCart();
+};
 
-loadHistory();
-
-}
-
-
-/* TRACKING */
-
-function trackOrder(){
-
-let code=
-document.getElementById("trackCode").value;
-
-let orders=
-JSON.parse(localStorage.getItem("orders")) || [];
-
-let found=
-orders.find(o=>o.code===code);
-
-if(!found){
-
-document.getElementById("trackingArea").innerHTML=
-"Commande introuvable";
-
-return;
-
-}
-
-let s=found.status;
-
-let html=`
-
-<div class="timeline">
-
-<div class="step">
-<div class="circle green"></div>
-Commande effectuée
-</div>
-
-<div class="step">
-<div class="circle ${s==='Confirmé' || s==='Préparation' || s==='Prêt à être livré' || s==='Expédition' || s==='Colis livré' ? 'green':''}">
-</div>
-Confirmé
-</div>
-
-<div class="step">
-<div class="circle ${s==='Préparation' || s==='Prêt à être livré' || s==='Expédition' || s==='Colis livré' ? 'orange':''}">
-</div>
-Préparation
-</div>
-
-<div class="step">
-<div class="circle ${s==='Prêt à être livré' || s==='Expédition' || s==='Colis livré' ? 'yellow':''}">
-</div>
-Prêt à être livré
-</div>
-
-<div class="step">
-<div class="circle ${s==='Expédition' || s==='Colis livré' ? 'blue':''}">
-</div>
-Expédition
-</div>
-
-<div class="step">
-<div class="circle ${s==='Colis livré' ? 'green':''}">
-</div>
-Colis livré
-</div>
-
-</div>
-
-`;
-
-document.getElementById("trackingArea").innerHTML=
-html;
-
-}
-
-
-/* HISTORIQUE */
+/* ================= HISTORIQUE (LIVE) ================= */
 
 function loadHistory(){
 
-let orders=
-JSON.parse(localStorage.getItem("orders")) || [];
+const ordersRef = ref(db,"orders");
 
+onValue(ordersRef,(snapshot)=>{
+
+let data=snapshot.val();
 let box=document.getElementById("history");
-
 box.innerHTML="";
 
-orders.forEach(order=>{
+for(let id in data){
+let o=data[id];
 
-box.innerHTML += `
-
+box.innerHTML+=`
 <div class="order">
-
-Commande : ${order.code}<br>
-
-Montant : ${order.total} FCFA<br>
-
-Etat : ${order.status}
-
-</div>
-
-`;
+${o.code}<br>
+${o.total} FCFA<br>
+${o.status}
+</div>`;
+}
 
 });
 
 }
 
-/* OUVRIR ADMIN */
+window.onload=loadHistory;
 
-function showAdmin(){
+/* ================= ADMIN ================= */
 
+window.showAdmin = function(){
 document.getElementById("adminPanel").style.display="block";
+};
 
-}
-
-
-/* CONNEXION ADMIN AVEC CODE */
-
-function loginAdmin(){
-
-let pass=
-document.getElementById("adminPass").value;
-
+window.loginAdmin = function(){
+let pass=document.getElementById("adminPass").value;
 if(pass==="Onassa2026"){
-
 loadAdminOrders();
-
-alert("Connexion admin réussie");
-
-}else{
-
-alert("Mot de passe incorrect");
-
-}
-
-}
-
-
-/* AFFICHER COMMANDES ADMIN */
+alert("OK");
+}else alert("Erreur");
+};
 
 function loadAdminOrders(){
 
-let orders=
-JSON.parse(localStorage.getItem("orders")) || [];
+const ordersRef = ref(db,"orders");
 
-let zone=
-document.getElementById("adminOrders");
+onValue(ordersRef,(snapshot)=>{
 
+let data=snapshot.val();
+let zone=document.getElementById("adminOrders");
 zone.innerHTML="";
 
+for(let id in data){
+let o=data[id];
 
-orders.forEach((order,index)=>{
-
-zone.innerHTML += `
-
+zone.innerHTML+=`
 <div class="order">
+${o.code}<br>
+${o.name}<br>
+${o.total} FCFA<br>
+${o.status}<br><br>
 
-Code : ${order.code}<br>
+<button onclick="changeStatus('${id}','Confirmé')">Confirmer</button>
+<button onclick="changeStatus('${id}','Préparation')">Préparation</button>
+<button onclick="changeStatus('${id}','Expédition')">Expédition</button>
+<button onclick="changeStatus('${id}','Colis livré')">Livré</button>
 
-Client : ${order.name}<br>
-
-Montant : ${order.total} FCFA<br>
-
-Etat : <b>${order.status}</b><br><br>
-
-
-<button
-class="adminBtn ${order.status==='Confirmé' ? 'activeConfirmed':''}"
-onclick="changeStatus(${index},'Confirmé')">
-
-Confirmer
-
-</button>
-
-
-<button
-class="adminBtn ${order.status==='Préparation' ? 'activePreparation':''}"
-onclick="changeStatus(${index},'Préparation')">
-
-Préparation
-
-</button>
-
-
-<button
-class="adminBtn ${order.status==='Prêt à être livré' ? 'activeReady':''}"
-onclick="changeStatus(${index},'Prêt à être livré')">
-
-Prêt livraison
-
-</button>
-
-
-<button
-class="adminBtn ${order.status==='Expédition' ? 'activeShipping':''}"
-onclick="changeStatus(${index},'Expédition')">
-
-Expédition
-
-</button>
-
-
-<button
-class="adminBtn ${order.status==='Colis livré' ? 'activeDelivered':''}"
-onclick="changeStatus(${index},'Colis livré')">
-
-Livré
-
-</button>
-
-</div>
-
-`;
+</div>`;
+}
 
 });
 
 }
 
+/* ================= CHANGER STATUT ================= */
 
-/* CHANGER STATUT */
+window.changeStatus = function(id,status){
 
-function changeStatus(index,status){
-
-let orders=
-JSON.parse(localStorage.getItem("orders")) || [];
-
-orders[index].status=status;
-
-
-/* si livré -> enregistrer temps */
-
-if(status==="Colis livré"){
-
-orders[index].deliveredAt=Date.now();
-
-}
-
-localStorage.setItem(
-
-"orders",
-JSON.stringify(orders)
-
-);
-
-
-/* refresh */
-
-loadAdminOrders();
-
-loadHistory();
-
-alert("Statut changé");
-
-}
-
-
-/* SUPPRIMER SI LIVRE DEPUIS 3 MINUTES */
-
-function cleanDelivered(){
-
-let orders=
-JSON.parse(localStorage.getItem("orders")) || [];
-
-let now=Date.now();
-
-orders=orders.filter(order=>{
-
-if(order.status==="Colis livré"){
-
-let diff=
-now-order.deliveredAt;
-
-
-/* 180000 = 3 min */
-
-if(diff>180000){
-
-return false;
-
-}
-
-}
-
-return true;
-
+update(ref(db,"orders/"+id),{
+status:status
 });
 
-localStorage.setItem(
-
-"orders",
-JSON.stringify(orders)
-
-);
-
-loadHistory();
-
-}
-
-
-/* AUTO VERIFICATION */
-
-setInterval(function(){
-
-cleanDelivered();
-
-},5000);
-
-
-/* DEMARRAGE */
-
-window.onload=function(){
-
-loadHistory();
+alert("Statut mis à jour");
 
 };
 
