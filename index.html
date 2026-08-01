@@ -448,7 +448,34 @@ O'NASSA © 2026
 
 let cart=[];
 let loyal=false;
+/* ================= CODE FIDELITE ================= */
 
+const codes = [
+"ON001","ON002","ON003","ON004","ON005",
+"ON006","ON007","ON008","ON009","ON010"
+];
+
+function checkCode(){
+
+let code = document.getElementById("loyalCode").value;
+
+if(codes.includes(code)){
+
+loyal = true;
+
+document.getElementById("codeResult").innerHTML =
+"✅ Réduction activée 🎉";
+
+}else{
+
+loyal = false;
+
+document.getElementById("codeResult").innerHTML =
+"❌ Code invalide";
+
+}
+
+}
 /* ================= COMPTEUR PANIER ================= */
 
 function updateCartCount(){
@@ -583,10 +610,8 @@ details+
 "🧾 Code: "+code;
 
 /* IMPORTANT : numéro sans 0 */
-let phoneNumber = "225594720472";
 
-let url = "https://wa.me/"+phoneNumber+"?text="+encodeURIComponent(msg);
-
+let url = "https://wa.me/225594720472?text="+encodeURIComponent(msg);
 window.open(url, "_blank");
 
 /* ================= RESET ================= */
