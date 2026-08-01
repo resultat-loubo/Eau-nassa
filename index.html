@@ -367,8 +367,9 @@ text-align:center;
 
 </section>
 
-<div id="cartBtn" onclick="openCart()">🛒</div>
-
+<div id="cartBtn" onclick="openCart()">
+🛒 <span id="cartCount">0</span>
+</div>
 <div class="modal" id="cartModal">
 
 <div class="modalContent">
@@ -443,210 +444,167 @@ O'NASSA © 2026
 <p>&copy; 2026 Grand-Zattry </p>
 <p>Mail:o'nassa524@Gmail.com /Tel:01-43-34-17-09 /</p>
 </footer>
-<script type="module">
-
-/* ================= FIREBASE REALTIME ================= */
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, update } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB6p104mWHVO_eEcI8GIl6aQZr57qH5Jts",
-  authDomain: "o-nassa.firebaseapp.com",
-  databaseURL: "https://o-nassa-default-rtdb.firebaseio.com/",
-  projectId: "o-nassa",
-  storageBucket: "o-nassa.firebasestorage.app",
-  messagingSenderId: "264530421759",
-  appId: "1:264530421759:web:810f1ac2f5e2d3572629ca"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-/* ================= VARIABLES ================= */
+<script>
 
 let cart=[];
+let loyal=false;
+
+/* ================= COMPTEUR PANIER ================= */
+
+function updateCartCount(){
+let count=0;
+cart.forEach(item=>{ count+=item.qty; });
+document.getElementById("cartCount").innerText=count;
+}
 
 /* ================= AJOUT PRODUITS ================= */
 
-window.addBidon = function(){
+function addBidon(){
+
 let price=parseInt(document.getElementById("bidonType").value);
 let qty=parseInt(document.getElementById("bidonQty").value);
 
-if(!qty) return alert("Entrez quantité");
+if(!qty){ alert("Entrez quantité"); return; }
+
+if(loyal){
+if(price===5000) price=4500;
+if(price===1000) price=800;
+if(price===100) price=80;
+}
 
 cart.push({name:"Bidon",price,qty});
-alert("Ajouté");
-};
 
-window.addSachet = function(){
+updateCartCount();
+alert("Ajouté au panier");
+}
+
+function addSachet(){
+
 let price=parseInt(document.getElementById("sachetType").value);
 let qty=parseInt(document.getElementById("sachetQty").value);
 
-if(!qty) return alert("Entrez quantité");
+if(!qty){ alert("Entrez quantité"); return; }
+
+if(loyal){
+if(price===2000) price=1700;
+if(price===1000) price=800;
+if(price===50) price=40;
+}
 
 cart.push({name:"Sachet",price,qty});
-alert("Ajouté");
-};
+
+updateCartCount();
+alert("Ajouté au panier");
+}
 
 /* ================= PANIER ================= */
 
-window.openCart = function(){
+function openCart(){
 document.getElementById("cartModal").style.display="block";
 showCart();
-};
+}
 
-window.closeCart = function(){
+function closeCart(){
 document.getElementById("cartModal").style.display="none";
-};
+}
 
 function showCart(){
+
 let zone=document.getElementById("cartItems");
 let total=0;
 zone.innerHTML="";
 
 cart.forEach((item,index)=>{
+
 let subtotal=item.price*item.qty;
 total+=subtotal;
 
 zone.innerHTML+=`
 <div class="order">
-${item.name} x${item.qty}<br>
-${subtotal} FCFA<br>
+${item.name}<br>
+Prix : ${item.price} FCFA<br>
+Quantité : ${item.qty}<br>
+Sous-total : ${subtotal} FCFA<br><br>
 <button onclick="removeItem(${index})">Supprimer</button>
-</div>`;
+</div>
+`;
+
 });
 
-document.getElementById("cartTotal").innerHTML="Total : "+total+" FCFA";
+document.getElementById("cartTotal").innerText="Total : "+total+" FCFA";
 }
 
-window.removeItem = function(index){
+/* ================= SUPPRIMER ================= */
+
+function removeItem(index){
 cart.splice(index,1);
+updateCartCount();
 showCart();
-};
+}
 
-/* ================= ENVOYER COMMANDE ================= */
+/* ================= COMMANDE ================= */
 
-window.sendOrder = function(){
+function sendOrder(){
 
 let name=document.getElementById("clientName").value;
 let city=document.getElementById("clientCity").value;
 let phone=document.getElementById("clientPhone").value;
 
-if(!name||!city||!phone) return alert("Remplissez tout");
-if(cart.length===0) return alert("Panier vide");
+if(!name||!city||!phone){
+alert("Remplissez tout");
+return;
+}
+
+if(cart.length===0){
+alert("Panier vide");
+return;
+}
 
 let total=0;
-cart.forEach(i=> total+=i.price*i.qty);
+let details="";
+
+cart.forEach(item=>{
+let amount=item.price*item.qty;
+total+=amount;
+details += item.name+" x"+item.qty+" = "+amount+" FCFA\n";
+});
 
 let code="CMD"+Date.now();
 
-/* 🔥 ENVOI DANS FIREBASE */
+/* ================= WHATSAPP CORRIGÉ ================= */
 
-push(ref(db,"orders"),{
-code,
-name,
-city,
-phone,
-total,
-status:"Commande effectuée",
-createdAt:Date.now()
-});
+let msg =
+"🛒 COMMANDE O'NASSA\n\n"+
+"👤 Nom: "+name+"\n"+
+"📍 Ville: "+city+"\n"+
+"📞 Téléphone: "+phone+"\n\n"+
+details+
+"\n💰 Total: "+total+" FCFA\n"+
+"🧾 Code: "+code;
 
-alert("Commande envoyée : "+code);
+/* IMPORTANT : numéro sans 0 */
+let phoneNumber = "225594720472";
+
+let url = "https://wa.me/"+phoneNumber+"?text="+encodeURIComponent(msg);
+
+window.open(url, "_blank");
+
+/* ================= RESET ================= */
+
+alert("Commande envoyée !");
 
 cart=[];
+updateCartCount();
 showCart();
-};
-
-/* ================= HISTORIQUE (LIVE) ================= */
-
-function loadHistory(){
-
-const ordersRef = ref(db,"orders");
-
-onValue(ordersRef,(snapshot)=>{
-
-let data=snapshot.val();
-let box=document.getElementById("history");
-box.innerHTML="";
-
-for(let id in data){
-let o=data[id];
-
-box.innerHTML+=`
-<div class="order">
-${o.code}<br>
-${o.total} FCFA<br>
-${o.status}
-</div>`;
-}
-
-});
 
 }
 
-window.onload=loadHistory;
+/* ================= DEMARRAGE ================= */
 
-/* ================= ADMIN ================= */
-
-window.showAdmin = function(){
-document.getElementById("adminPanel").style.display="block";
-};
-
-window.loginAdmin = function(){
-let pass=document.getElementById("adminPass").value;
-if(pass==="Onassa2026"){
-loadAdminOrders();
-alert("OK");
-}else alert("Erreur");
-};
-
-function loadAdminOrders(){
-
-const ordersRef = ref(db,"orders");
-
-onValue(ordersRef,(snapshot)=>{
-
-let data=snapshot.val();
-let zone=document.getElementById("adminOrders");
-zone.innerHTML="";
-
-for(let id in data){
-let o=data[id];
-
-zone.innerHTML+=`
-<div class="order">
-${o.code}<br>
-${o.name}<br>
-${o.total} FCFA<br>
-${o.status}<br><br>
-
-<button onclick="changeStatus('${id}','Confirmé')">Confirmer</button>
-<button onclick="changeStatus('${id}','Préparation')">Préparation</button>
-<button onclick="changeStatus('${id}','Expédition')">Expédition</button>
-<button onclick="changeStatus('${id}','Colis livré')">Livré</button>
-
-</div>`;
-}
-
-});
-
-}
-
-/* ================= CHANGER STATUT ================= */
-
-window.changeStatus = function(id,status){
-
-update(ref(db,"orders/"+id),{
-status:status
-});
-
-alert("Statut mis à jour");
-
+window.onload=function(){
+updateCartCount();
 };
 
 </script>
-
 </body>
 </html>
